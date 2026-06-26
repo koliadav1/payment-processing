@@ -1,0 +1,27 @@
+from sqlalchemy.ext.asyncio import async_sessionmaker
+
+from . import (
+    PaymentsRepository,
+)
+from src.core.interfaces.unit_of_work import IUnitOfWork
+
+
+class SQLAlchUnitOfWork(IUnitOfWork):
+    def __init__(self, session_factory: async_sessionmaker):
+        self._session_factory = session_factory
+
+    async def __aenter__(self):
+        self.session = self._session_factory()
+
+        self.payments_repo = PaymentsRepository(self.session)
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        try:
+            if exc_type:
+                await self.session.rollback()
+            else:
+                await self.session.commit()
+        finally:
+            await self.session.close()
+            self.session = None
