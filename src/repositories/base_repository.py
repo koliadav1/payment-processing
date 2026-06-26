@@ -1,3 +1,4 @@
+import uuid
 from typing import TypeVar
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,7 +15,7 @@ class SQLRepository(IRepository[T]):
         self._session = session
         self._model = model
 
-    async def get(self, id: int) -> T | None:
+    async def get(self, id: uuid.UUID) -> T | None:
         """Получить сущность по ID"""
         return await self._session.get(self._model, id)
 
@@ -32,7 +33,7 @@ class SQLRepository(IRepository[T]):
         await self._session.refresh(entity)
         return entity
 
-    async def delete(self, id: int) -> None:
+    async def delete(self, id: uuid.UUID) -> None:
         """Удалить сущность по ID"""
         await self._session.execute(
             delete(self._model).where(self._model.id == id)

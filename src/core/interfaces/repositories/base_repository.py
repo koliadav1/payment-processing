@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
+import uuid
 
 T = TypeVar("T")
 
 
 class IRepository(ABC, Generic[T]):
     @abstractmethod
-    async def get(self, id: int) -> T | None:
+    async def get(self, id: uuid.UUID) -> T | None:
         """Получить сущность по ID"""
         pass
 
@@ -21,6 +22,6 @@ class IRepository(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def delete(self, id: int) -> None:
+    async def delete(self, id: uuid.UUID) -> None:
         """Удалить сущность по ID"""
         pass
