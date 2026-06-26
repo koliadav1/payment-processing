@@ -40,6 +40,7 @@ class PaymentService:
             added_payment = await uow.payments_repo.add(payment)
 
             # TODO outbox, queue etc
+
         return added_payment
 
     async def get_payment(

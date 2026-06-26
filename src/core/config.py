@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
+    API_KEY: str
+
     @property
     def DB_URL(self) -> str:
         return (

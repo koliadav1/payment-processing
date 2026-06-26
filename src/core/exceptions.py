@@ -6,6 +6,10 @@ class AppBaseException(Exception):
     status_code = 400
 
 
+class ForbiddenError(AppBaseException):
+    status_code = 403
+
+
 class PaymentNotFoundError(AppBaseException):
     status_code = 404
 
