@@ -14,12 +14,11 @@ class OutboxRepository(IOutboxRepository):
     def __init__(self, session: AsyncSession):
         self._session = session
 
-    async def save(self, outbox: OutboxEvent) -> OutboxEvent:
+    async def save(self, outbox: OutboxEvent) -> None:
         """Сохранить событие в outbox"""
         self._session.add(outbox)
         await self._session.flush()
         await self._session.refresh(outbox)
-        return outbox
 
     async def get_pending(self, limit: int = 100) -> List[OutboxEvent]:
         """Получить события для публикации"""
