@@ -1,8 +1,12 @@
 import uuid
+from typing import TYPE_CHECKING
 
-from src.models.payments import PaymentStatus, Payment, Currency
+from src.models.payments import Payment, Currency
 from src.core.exceptions import PaymentAlreadyExistsError, PaymentNotFoundError
-from src.core.interfaces.unit_of_work import IUnitOfWork
+from .dependencies import OutboxMethods
+
+if TYPE_CHECKING:
+    from src.core.interfaces.unit_of_work import IUnitOfWork
 
 
 class PaymentService:
@@ -39,7 +43,19 @@ class PaymentService:
 
             added_payment = await uow.payments_repo.add(payment)
 
-            # TODO outbox, queue etc
+            event_payload = {
+                "payment_id": str(added_payment.id),
+                "amount": str(added_payment.amount),
+                "currency": added_payment.currency.value,
+                "description": added_payment.description,
+                "payment_metadata": added_payment.payment_metadata,
+                "webhook_url": added_payment.webhook_url,
+                "created_at": added_payment.created_at.isoformat(),
+            }
+
+            await OutboxMethods.save_event(
+                event_type="payment_created", payload=event_payload, uow=uow
+            )
 
         return added_payment
 
