@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 
 from . import (
     PaymentsRepository,
+    OutboxRepository,
 )
 from src.core.interfaces.unit_of_work import IUnitOfWork
 
@@ -14,6 +15,7 @@ class SQLAlchUnitOfWork(IUnitOfWork):
         self.session = self._session_factory()
 
         self.payments_repo = PaymentsRepository(self.session)
+        self.outbox_repo = OutboxRepository(self.session)
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
