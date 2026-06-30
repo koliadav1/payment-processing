@@ -1,11 +1,10 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Header, Request, status
+from fastapi import APIRouter, Depends, Header
 
 from src.core.interfaces.unit_of_work import IUnitOfWork
 from src.services.payment_service import PaymentService
-from src.models.payments import User
-from src.schemas.users import (
+from src.schemas.payments import (
     PaymentReadResponse,
     PaymentResponse,
     PaymentCreate,
@@ -42,7 +41,9 @@ async def create_payment(
         payment_metadata=payment_data.payment_metadata,
     )
 
-    return PaymentResponse(payment.id, payment.status, payment.created_at)
+    return PaymentResponse(
+        id=payment.id, status=payment.status, created_at=payment.created_at
+    )
 
 
 @router.get(

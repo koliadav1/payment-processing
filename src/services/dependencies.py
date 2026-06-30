@@ -1,10 +1,8 @@
 import uuid
-from typing import TYPE_CHECKING, Any, Dict
+from typing import Any, Dict
 
 from src.models.outbox import OutboxEvent
-
-if TYPE_CHECKING:
-    from src.core.interfaces.unit_of_work import IUnitOfWork
+from src.core.interfaces.unit_of_work import IUnitOfWork
 
 
 class OutboxMethods:
@@ -17,11 +15,10 @@ class OutboxMethods:
         """
         Создание нового события в outbox
         """
-        async with uow:
-            event = OutboxEvent(
-                id=uuid.uuid4(),
-                event_type=event_type,
-                payload=payload,
-            )
+        event = OutboxEvent(
+            id=uuid.uuid4(),
+            event_type=event_type,
+            payload=payload,
+        )
 
-            await uow.outbox_repo.save(event)
+        await uow.outbox_repo.save(event)

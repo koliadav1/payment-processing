@@ -2,11 +2,10 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy import String, DateTime, Numeric, Uuid, func
+from sqlalchemy import String, DateTime, Uuid, func
 from sqlalchemy import Enum as SQLEnum
 from datetime import datetime
 from enum import Enum
-from decimal import Decimal
 from typing import Any, Dict
 
 from src.core.database import Base

@@ -32,14 +32,8 @@ class OutboxRepository(IOutboxRepository):
         result = await self._session.execute(query)
         return result.scalars().all()
 
-    async def mark_as_processed(self, outbox_id: uuid.UUID) -> None:
+    async def mark_as_processed(self, outbox_event: OutboxEvent) -> None:
         """Пометить событие как обработанное"""
-        await self._session.execute(
-            update(OutboxEvent)
-            .where(OutboxEvent.id == outbox_id)
-            .values(
-                status=OutboxEventStatus.PROCESSED,
-                processed_at=datetime.now(tzinfo=timezone.utc),
-            )
-        )
+        outbox_event.status = OutboxEventStatus.PROCESSED
+        outbox_event.processed_at = datetime.now(timezone.utc)
         await self._session.flush()

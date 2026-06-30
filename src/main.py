@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from src.core.exceptions import register_exception_handlers
