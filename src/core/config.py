@@ -10,6 +10,8 @@ class Settings(BaseSettings):
 
     API_KEY: str
 
+    RABBITMQ_URL: str
+
     @property
     def DB_URL(self) -> str:
         return (

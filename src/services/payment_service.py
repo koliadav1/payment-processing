@@ -1,12 +1,9 @@
 import uuid
-from typing import TYPE_CHECKING
 
 from src.models.payments import Payment, Currency
 from src.core.exceptions import PaymentAlreadyExistsError, PaymentNotFoundError
+from src.core.interfaces.unit_of_work import IUnitOfWork
 from .dependencies import OutboxMethods
-
-if TYPE_CHECKING:
-    from src.core.interfaces.unit_of_work import IUnitOfWork
 
 
 class PaymentService:
@@ -38,7 +35,7 @@ class PaymentService:
                 description=description,
                 payment_metadata=payment_metadata,
                 idempotency_key=idempotency_key,
-                webhook_url=webhook_url,
+                webhook_url=str(webhook_url),
             )
 
             added_payment = await uow.payments_repo.add(payment)
@@ -57,7 +54,7 @@ class PaymentService:
                 event_type="payment_created", payload=event_payload, uow=uow
             )
 
-        return added_payment
+            return added_payment
 
     async def get_payment(
         self, payment_id: uuid.UUID, uow: IUnitOfWork

@@ -5,7 +5,7 @@ from typing import Annotated, Any, Dict
 from pydantic import AfterValidator, BaseModel, ConfigDict, Field, HttpUrl
 from decimal import Decimal
 
-from models.payments import Currency, PaymentStatus
+from src.models.payments import Currency, PaymentStatus
 
 
 def validate_utc(v: datetime) -> datetime:

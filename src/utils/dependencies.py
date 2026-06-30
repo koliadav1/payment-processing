@@ -1,7 +1,5 @@
-from collections.abc import AsyncGenerator
 from typing import Annotated
 from fastapi import Header
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.exceptions import ForbiddenError
 from src.core.database import session_maker

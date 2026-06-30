@@ -1,7 +1,7 @@
 [project]
-name = "business-management-system"
-version = "1.3.1"
-description = "Система управления бизнесом"
+name = "payment-management-system"
+version = "1.0.0"
+description = "Система управления платежами"
 requires-python = ">=3.13"
 dependencies = [
     "alembic==1.18.5",
@@ -12,7 +12,8 @@ dependencies = [
     "pydantic-settings==2.14.2",
     "SQLAlchemy==2.0.48",
     "uvicorn==0.42.0",
-
+    "faststream[cli]",
+    "faststream[rabbit]",
 ]
 
 [project.optional-dependencies]
