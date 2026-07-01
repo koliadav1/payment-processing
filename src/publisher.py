@@ -13,11 +13,13 @@ from src.utils.dependencies import get_uow
 BATCH_SIZE = 100
 POLL_INTERVAL = 5
 
+MAIN_QUEUE_NAME = "payments.new"
+
 broker = RabbitBroker(settings.RABBITMQ_URL)
 payment_exchange = RabbitExchange(
-    name="x-rmq-payments-new", type=ExchangeType.DIRECT, durable=True
+    name="x-payments-new", type=ExchangeType.DIRECT, durable=True
 )
-payment_queue = RabbitQueue(name="payments.new", durable=True)
+payment_queue = RabbitQueue(name=MAIN_QUEUE_NAME, durable=True)
 payment_publisher = broker.publisher(
     queue=payment_queue, exchange=payment_exchange
 )
@@ -63,6 +65,6 @@ async def start_outbox_publisher():
     x = await broker.declare_exchange(payment_exchange)
     q = await broker.declare_queue(payment_queue)
 
-    await q.bind(x, routing_key="payments.new")
+    await q.bind(x, routing_key=MAIN_QUEUE_NAME)
 
     asyncio.create_task(outbox_polling_loop())
