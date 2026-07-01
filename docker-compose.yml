@@ -7,6 +7,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
   web:
     build:
       context: .
@@ -53,6 +54,20 @@ services:
     volumes:
       - ./app:/app/app
     command: faststream run src.publisher:app --reload
+    env_file:
+      - .env.dev
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  consumer:
+    build: .
+    volumes:
+      - ./app:/app/app
+    command: faststream run src.consumer:app --reload
     env_file:
       - .env.dev
     depends_on:

@@ -52,3 +52,13 @@ class PaymentReadResponse(PaymentResponse):
     processed_at: UtcDateTime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class PaymentEventPayload(BaseModel):
+    id: uuid.UUID
+    amount: Decimal
+    currency: Currency
+    description: str | None
+    payment_metadata: Dict[str, Any] | None
+    webhook_url: str
+    created_at: UtcDateTime

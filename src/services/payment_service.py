@@ -41,7 +41,7 @@ class PaymentService:
             added_payment = await uow.payments_repo.add(payment)
 
             event_payload = {
-                "payment_id": str(added_payment.id),
+                "id": str(added_payment.id),
                 "amount": str(added_payment.amount),
                 "currency": added_payment.currency.value,
                 "description": added_payment.description,
