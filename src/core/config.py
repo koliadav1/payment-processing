@@ -20,7 +20,7 @@ class Settings(BaseSettings):
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
-    model_config = SettingsConfigDict(env_file=".env.dev")
+    model_config = SettingsConfigDict(env_file=".env.prod")
 
 
 settings = Settings()

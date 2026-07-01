@@ -14,10 +14,11 @@ BATCH_SIZE = 100
 POLL_INTERVAL = 5
 
 MAIN_QUEUE_NAME = "payments.new"
+MAIN_EXCHANGE_NAME = "x-payments-new"
 
 broker = RabbitBroker(settings.RABBITMQ_URL)
 payment_exchange = RabbitExchange(
-    name="x-payments-new", type=ExchangeType.DIRECT, durable=True
+    name=MAIN_EXCHANGE_NAME, type=ExchangeType.DIRECT, durable=True
 )
 payment_queue = RabbitQueue(name=MAIN_QUEUE_NAME, durable=True)
 payment_publisher = broker.publisher(
@@ -38,8 +39,6 @@ async def outbox_polling_loop():
                     await asyncio.sleep(POLL_INTERVAL)
                     continue
 
-                print(f"[Outbox] Найдено {len(events)} событий для отправки")
-
                 for event in events:
                     event_uow = await get_uow()
                     async with event_uow:
@@ -56,7 +55,6 @@ async def outbox_polling_loop():
         except asyncio.CancelledError:
             break
         except Exception as e:
-            print(f"Outbox publisher error: {e}")
             await asyncio.sleep(POLL_INTERVAL)
 
 

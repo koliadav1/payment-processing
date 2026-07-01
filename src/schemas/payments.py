@@ -49,7 +49,7 @@ class PaymentReadResponse(PaymentResponse):
     description: str | None
     payment_metadata: Dict[str, Any] | None
     webhook_url: str
-    processed_at: UtcDateTime
+    processed_at: UtcDateTime | None
 
     model_config = ConfigDict(from_attributes=True)
 

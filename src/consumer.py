@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime, timezone
 import random
 from faststream import FastStream, Logger
 from faststream.rabbit import (
@@ -104,6 +105,7 @@ async def handle_payment_event(
             return
         logger.info(f"Платеж {event.id} обработан успешно")
         payment.status = PaymentStatus.SUCCEEDED
+        payment.processed_at = datetime.now(timezone.utc)
         await uow.payments_repo.update(payment)
 
     webhook_data = {
